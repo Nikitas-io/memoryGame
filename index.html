@@ -1,9 +1,11 @@
 <!doctype html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Matching Game</title>
+    <meta name="author" content="Nikitas Chatzipazarlis">
     <meta name="description" content="Matvhing cards game!">
     <meta name="keywords" content="game, memory, cards, match, mathcing">
     <link rel="stylesheet prefetch" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
@@ -12,6 +14,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="js/app.js"></script>
 </head>
+
 <body>
 
     <div class="container">
@@ -20,75 +23,98 @@
         </header>
 
         <section class="score-panel">
-        	<ul class="stars">
-        		<li><i class="fa fa-star"></i></li>
-        		<li><i class="fa fa-star"></i></li>
-        		<li><i class="fa fa-star"></i></li>
-        	</ul>
+            <h5 class="tip">Note: Every 5 mistakes you lose a star.</h5>
+            <ul class="stars">
+                <li id="star1">
+                    <strong>★</strong>
+                </li>
+                <li id="star2">
+                    <strong>★</strong>
+                </li>
+                <li id="star3">
+                    <strong>★</strong>
+                </li>
+            </ul>
 
-        	<span class="moves">3</span> Moves
+            <span class="moves">
+                0
+                <!--Print out the number of moves dynamically.-->
+            </span> Moves
 
             <div class="restart">
-        		<i class="fa fa-repeat"></i>
-        	</div>
+                <i class="fa fa-repeat">&nbsp;Replay</i>
+            </div>
         </section>
 
-        <ul class="deck">
-            <li class="card close">
-                <i class="fa fa-diamond"></i>
-            </li>
-                <i class="fa fa-paper-plane-o"></i>
-            <li class="card close">
-                <i class="fa fa-paper-plane-o"></i>
-            </li>
-            <li class="card close">
-                <i class="fa fa-anchor"></i>
-            </li>
-            <li class="card close">
-                <i class="fa fa-bolt"></i>
-            </li>
-            <li class="card close">
-                <i class="fa fa-cube"></i>
-            </li>
-            <li class="card close">
-                <i class="fa fa-anchor"></i>
-            </li>
-            <li class="card close">
-                <i class="fa fa-leaf"></i>
-            </li>
-            <li class="card close">
-                <i class="fa fa-bicycle"></i>
-            </li>
-            <li class="card close">
-                <i class="fa fa-diamond"></i>
-            </li>
-            <li class="card close">
-                <i class="fa fa-bomb"></i>
-            </li>
-            <li class="card close">
-                <i class="fa fa-leaf"></i>
-            </li>
-            <li class="card close">
-                <i class="fa fa-bomb"></i>
-            </li>
-            <li class="card close">
-                <i class="fa fa-bolt"></i>
-            </li>
-            <li class="card close">
-                <i class="fa fa-bicycle"></i>
-            </li>
-            <li class="card close">
-                <i class="fa fa-paper-plane-o"></i>
-            </li>
-            <li class="card close">
-                <i class="fa fa-cube"></i>
-            </li>
-        </ul>
-        <div class="test">
-
-        </div>
+        <main>
+            <ul class="deck">
+                <li class="card close">
+                    <i class="fa fa-diamond"></i>
+                </li>
+                <li class="card close">
+                    <i class="fa fa-paper-plane-o"></i>
+                </li>
+                <li class="card close">
+                    <i class="fa fa-anchor"></i>
+                </li>
+                <li class="card close">
+                    <i class="fa fa-bolt"></i>
+                </li>
+                <li class="card close">
+                    <i class="fa fa-cube"></i>
+                </li>
+                <li class="card close">
+                    <i class="fa fa-anchor"></i>
+                </li>
+                <li class="card close">
+                    <i class="fa fa-leaf"></i>
+                </li>
+                <li class="card close">
+                    <i class="fa fa-bicycle"></i>
+                </li>
+                <li class="card close">
+                    <i class="fa fa-diamond"></i>
+                </li>
+                <li class="card close">
+                    <i class="fa fa-bomb"></i>
+                </li>
+                <li class="card close">
+                    <i class="fa fa-leaf"></i>
+                </li>
+                <li class="card close">
+                    <i class="fa fa-bomb"></i>
+                </li>
+                <li class="card close">
+                    <i class="fa fa-bolt"></i>
+                </li>
+                <li class="card close">
+                    <i class="fa fa-bicycle"></i>
+                </li>
+                <li class="card close">
+                    <i class="fa fa-paper-plane-o"></i>
+                </li>
+                <li class="card close">
+                    <i class="fa fa-cube"></i>
+                </li>
+            </ul>
+        </main>
     </div>
 
-    <script src="js/app.js"></script>
+
+    <footer>
+        <a class="btn" data-popup-open="popup-1" href="#">Open Modal</a>
+        <div class="popup" data-popup="popup-1">
+            <div class="popup-inner">
+                <h2>Well done! Here's your stats:</h2>
+                <p class="stats">
+                    <!-- Print out the stats here dynamically -->
+                </p>
+                <input class="playAgain" type="button" value="Play again!" data-popup-close="popup-1">
+                <a class="popup-close" data-popup-close="popup-1" href="#">x</a>
+            </div>
+        </div>
+
+    </footer>
 </body>
+
 </html>
