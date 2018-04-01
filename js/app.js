@@ -1,10 +1,14 @@
-let afterReset = false;
-let clickCounter = 0;
+let afterReset = false; //Flag used to manage the unmatch class after reseting the game.
+let clickCounter = 0; 
 let moveCounter = 0;
 let mistakeCounter = 0;
 let totalStars = 3; //Start with 3 stars.
 
-// Shuffle function from http://stackoverflow.com/a/2450976
+/**
+ * @description Shuffle function from http://stackoverflow.com/a/2450976.
+ * @param {*} array The array to be shuffled
+ * @returns The shuffled array.
+ */
 function shuffle(array) {
     var currentIndex = array.length,
         temporaryValue, randomIndex;
@@ -20,7 +24,9 @@ function shuffle(array) {
 }
 
 
-//Reset the cards of the deck that are not matched.
+/**
+ * @description Reset the cards of the deck that are not matched.
+ */
 function resetCards() {
     $('.deck li').each(function () {
         let resetFlag = $(this).hasClass('open');
@@ -38,23 +44,48 @@ function resetCards() {
     clickCounter = 0;
 }
 
-
-
-/*
- * set up the event listener for a card. If a card is clicked:
- *  - display the card's symbol (put this functionality in another function that you call from this one)
- *  - add the card to a *list* of "open" cards (put this functionality in another function that you call from this one)
- *  - if the list already has another card, check to see if the two cards match
- *    + if the cards do match, lock the cards in the open position (put this functionality in another function that you call from this one)
- *    + if the cards do not match, remove the cards from the list and hide the card's symbol (put this functionality in another function that you call from this one)
- *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
- *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
+/**
+ * @description Print move number on the score pannel.
  */
+function increaseMoves() {
+    moveCounter++;
+    $('.moves').empty();
+    $('.moves').append(moveCounter);
+}
+
+/**
+ * @description Prints the final score in the modal.
+ */
+function printScore() {
+    //Print move number on the results modal.
+    $('.stats').empty();
+    $('.stats').append("You made " + moveCounter + " moves.<br>");
+    //Print out the stars-score on the result modal.
+    if (totalStars == 3) {
+        $('.stats').append("<br>WOW " + totalStars + " stars! Awesome!!");
+        $('.stats').append("<br><span class='stars'>★★★</span>");
+    } else if (totalStars == 2) {
+        $('.stats').append("<br>You get " + totalStars + " stars. Very good! But not perfect...");
+        $('.stats').append("<br><span class='stars'>★★☆</span>");
+    } else if (totalStars == 1) {
+        $('.stats').append("<br>You get " + totalStars + " star. You can do better :)");
+        $('.stats').append("<br><span class='stars'>★☆☆</span>");
+    } else {
+        $('.stats').append("<br>No stars... Better luck next time.");
+        $('.stats').append("<br><span class='stars'>☆☆☆</span>");
+    }
+    //Print time.
+    let seconds=$('#seconds').text();
+    let tens=$('#tens').text();
+    $('.stats').append("<br><br>Your time is "+seconds+"s and "+tens+"ms.");
+}
 
 $(function () {
 
+    /**
+     * @description Restarts the game.
+     */
     function playAgain() {
-
         //Turn the cards around.
         resetCards(); //Reset the unmatched cards.
         afterReset = true;
@@ -69,7 +100,6 @@ $(function () {
 
         //Shuffle the cards again,
         let shuffledCards = shuffle(cardsToShuffle);
-        //$('.deck').empty();
         $('.deck').append(shuffledCards);
 
         //Reset click counter.
@@ -80,10 +110,80 @@ $(function () {
         $('.moves').append(moveCounter);
         //Reset star ratings.
         mistakeCounter = 0;
-        totalStars=3;
+        totalStars = 3;
         $('#star1').find('strong').html('★');
         $('#star2').find('strong').html('★');
         $('#star3').find('strong').html('★');
+        //Reset timer.
+        clearInterval(Interval);
+        tens = "00";
+        seconds = "00";
+        appendTens.innerHTML = tens;
+        appendSeconds.innerHTML = seconds;
+    }
+
+    /**
+     * @description In case the two cards have matched this function enables the appropriate classes.
+     */
+    function matchCards() {
+        $(flippedCards.card1element).toggleClass('open');
+        $(flippedCards.card1element).toggleClass('match');
+        $(flippedCards.card2element).toggleClass('open');
+        $(flippedCards.card2element).toggleClass('match');
+        clickCounter = 0;
+    }
+
+    /**
+     * @description In case the two cards do not match, take the appropriate actions.
+     */
+    function unmatchCards() {
+        mistakeCounter++; //Counts the wrong moves.
+        $(flippedCards.card1element).toggleClass('unmatch');
+        $(flippedCards.card2element).toggleClass('unmatch');
+        //Every 5 mistakes, subtract a star.
+        if (mistakeCounter == 5) {
+            $('#star3').find('strong').html('☆');
+            totalStars--;
+        }
+        if (mistakeCounter == 10) {
+            $('#star2').find('strong').html('☆');
+            totalStars--;
+        }
+        if (mistakeCounter == 15) {
+            $('#star1').find('strong').html('☆');
+            totalStars--;
+        }
+        //Reset the cards that did not match.
+        setTimeout(resetCards, 500);
+    }
+
+    /**
+     * @description Starts the timer. (Timer inspiration from https://codepen.io/cathydutton/pen/GBcvo.)
+     */
+    function startTimer() {
+        tens++;
+
+        if (tens < 9) {
+            appendTens.innerHTML = "0" + tens;
+        }
+
+        if (tens > 9) {
+            appendTens.innerHTML = tens;
+
+        }
+
+        if (tens > 99) {
+            console.log("seconds");
+            seconds++;
+            appendSeconds.innerHTML = "0" + seconds;
+            tens = 0;
+            appendTens.innerHTML = "0" + 0;
+        }
+
+        if (seconds > 9) {
+            appendSeconds.innerHTML = seconds;
+        }
+
     }
 
     //Get the cards in order to shuffle them.
@@ -91,16 +191,25 @@ $(function () {
     let cardsToShuffle = [...cards];
     let shuffledCards = shuffle(cardsToShuffle);
 
+    //Used to check if cards match.
     let flippedCards = {
         card1class: "",
         card1element: "",
         card2class: "",
         card2element: ""
     };
-    let matchFlag = false; //Checks if game has been completed
+
+    //Checks if game has been completed
+    let matchFlag = false; 
+
+    //Timer variables
+    var seconds = 00;
+    var tens = 00;
+    var appendTens = document.getElementById("tens");
+    var appendSeconds = document.getElementById("seconds");
+    var Interval;
 
     //Set shuffled cards on deck.
-    console.log(shuffledCards);
     $('.deck').empty();
     $('.deck').append(shuffledCards);
 
@@ -114,13 +223,16 @@ $(function () {
         let isClosed = $(this).hasClass('close');
         let isShown = $(this).hasClass('show');
 
+        //Start timer.
+        clearInterval(Interval);
+        Interval = setInterval(startTimer, 10);
+
         if (clickCounter <= 2) { //Make sure user doesn't open third card accidentally.
             let isMatched = $(this).hasClass('match');
 
             if (isClosed) {
                 clickCounter += 1;
 
-                console.log("click counter is: " + clickCounter);
                 if (clickCounter <= 2) {
                     $(this).toggleClass('open');
                     $(this).toggleClass('close');
@@ -131,49 +243,17 @@ $(function () {
                         flippedCards.card1element = $(this);
                     }
                     if (clickCounter == 2) {
-                        moveCounter++;
-                        //Print move number on the score pannel.
-                        $('.moves').empty();
-                        $('.moves').append(moveCounter);
+                        increaseMoves();
 
-                        //Print move number on the results modal.
-                        $('.stats').empty();
-                        $('.stats').append("You made " + moveCounter + " moves.");
-                        //Print out the stars-score on the result modal.
-                        $('.stats').append("<br>You made it with ");
-
-                        console.log(moveCounter);
                         flippedCards.card2class = $(this).children('i').attr('class');
                         flippedCards.card2element = $(this);
 
                         //In case the cards match.
                         if (flippedCards.card1class == flippedCards.card2class) {
-                            $(flippedCards.card1element).toggleClass('open');
-                            $(flippedCards.card1element).toggleClass('match');
-                            $(flippedCards.card2element).toggleClass('open');
-                            $(flippedCards.card2element).toggleClass('match');
-                            clickCounter = 0;
+                            matchCards();
                         } else {
                             if (afterReset == false) {
-                                mistakeCounter++;
-                                console.log(mistakeCounter);
-                                $(flippedCards.card1element).toggleClass('unmatch');
-                                $(flippedCards.card2element).toggleClass('unmatch');
-                                //Every 5 mistakes, subtract a star.
-                                if (mistakeCounter == 5) {
-                                    $('#star3').find('strong').html('☆');
-                                    totalStars--;
-                                }
-                                if (mistakeCounter == 10) {
-                                    $('#star2').find('strong').html('☆');
-                                    totalStars--;
-                                }
-                                if (mistakeCounter == 15) {
-                                    $('#star1').find('strong').html('☆');
-                                    totalStars--;
-                                }
-                                //Reset the cards that did not match.
-                                setTimeout(resetCards, 500);
+                                unmatchCards();
                             }
                         }
                     }
@@ -187,7 +267,7 @@ $(function () {
             let isMatched = $(this).hasClass('match');
             if (isMatched) {
                 matchCounter++;
-                if (matchCounter == cards.length) {
+                if (matchCounter == cards.length) { //If all 16 cards have matched, raise flag.
                     matchFlag = true; //Game has been completed
                 }
             }
@@ -195,23 +275,8 @@ $(function () {
 
         //If game has been completed, show modal.
         if (matchFlag) {
-            //Print move number on the results modal.
-            $('.stats').empty();
-            $('.stats').append("You made " + moveCounter + " moves.");
-            //Print out the stars-score on the result modal.
-            if(totalStars==3){
-                $('.stats').append("<br>WOW "+totalStars+" stars! Awesome!!");
-                $('.stats').append("<br><span class='stars'>★★★</span>");
-            }else if(totalStars==2){
-                $('.stats').append("<br>You get "+totalStars+" stars. Very good! :D");
-                $('.stats').append("<br><span class='stars'>★★☆</span>");
-            }else if(totalStars==1){
-                $('.stats').append("<br>You get "+totalStars+" star. You can do better :)");
-                $('.stats').append("<br><span class='stars'>★☆☆</span>");
-            }else{
-                $('.stats').append("<br>No stars... Better luck next time.");
-                $('.stats').append("<br><span class='stars'>☆☆☆</span>");
-            }
+            clearInterval(Interval); //Stop timer.
+            printScore();
 
             //Open the results module.
             let targeted_popup_class = $('[data-popup-open]').attr('data-popup-open');
@@ -224,14 +289,14 @@ $(function () {
         playAgain();
     });
 
-    //Modal
+    //Modal inspiration from http://inspirationalpixels.com/tutorials/custom-popup-modal#step-html.
 
-     //Open link (used for debbuging the modal).
+    /* //Open link (used for debbuging the modal).
     $('[data-popup-open]').on('click', function (e) {
         var targeted_popup_class = $(this).attr('data-popup-open');
         $('[data-popup="' + targeted_popup_class + '"]').fadeIn(350);
         e.preventDefault();
-    });
+    }); */
 
     //Close
     $('[data-popup-close]').on('click', function (e) {

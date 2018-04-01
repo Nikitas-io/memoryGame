@@ -161,7 +161,7 @@ h1 {
     cursor: pointer;
 }
 
-
+/* Match and unmatch inspiration from https://codepen.io/levineuland/pen/AmwCL. */
 @keyframes rubberBand {
     from {
         transform: scale3d(1, 1, 1);
