@@ -80,6 +80,7 @@ $(function () {
         $('.moves').append(moveCounter);
         //Reset star ratings.
         mistakeCounter = 0;
+        totalStars=3;
         $('#star1').find('strong').html('★');
         $('#star2').find('strong').html('★');
         $('#star3').find('strong').html('★');
@@ -135,6 +136,12 @@ $(function () {
                         $('.moves').empty();
                         $('.moves').append(moveCounter);
 
+                        //Print move number on the results modal.
+                        $('.stats').empty();
+                        $('.stats').append("You made " + moveCounter + " moves.");
+                        //Print out the stars-score on the result modal.
+                        $('.stats').append("<br>You made it with ");
+
                         console.log(moveCounter);
                         flippedCards.card2class = $(this).children('i').attr('class');
                         flippedCards.card2element = $(this);
@@ -155,12 +162,15 @@ $(function () {
                                 //Every 5 mistakes, subtract a star.
                                 if (mistakeCounter == 5) {
                                     $('#star3').find('strong').html('☆');
+                                    totalStars--;
                                 }
                                 if (mistakeCounter == 10) {
                                     $('#star2').find('strong').html('☆');
+                                    totalStars--;
                                 }
                                 if (mistakeCounter == 15) {
                                     $('#star1').find('strong').html('☆');
+                                    totalStars--;
                                 }
                                 //Reset the cards that did not match.
                                 setTimeout(resetCards, 500);
@@ -189,7 +199,19 @@ $(function () {
             $('.stats').empty();
             $('.stats').append("You made " + moveCounter + " moves.");
             //Print out the stars-score on the result modal.
-            $('.stars').append("\nYou made it with ")
+            if(totalStars==3){
+                $('.stats').append("<br>WOW "+totalStars+" stars! Awesome!!");
+                $('.stats').append("<br><span class='stars'>★★★</span>");
+            }else if(totalStars==2){
+                $('.stats').append("<br>You get "+totalStars+" stars. Very good! :D");
+                $('.stats').append("<br><span class='stars'>★★☆</span>");
+            }else if(totalStars==1){
+                $('.stats').append("<br>You get "+totalStars+" star. You can do better :)");
+                $('.stats').append("<br><span class='stars'>★☆☆</span>");
+            }else{
+                $('.stats').append("<br>No stars... Better luck next time.");
+                $('.stats').append("<br><span class='stars'>☆☆☆</span>");
+            }
 
             //Open the results module.
             let targeted_popup_class = $('[data-popup-open]').attr('data-popup-open');
@@ -203,12 +225,14 @@ $(function () {
     });
 
     //Modal
-    //Open link (used for debbuging the modal).
+
+     //Open link (used for debbuging the modal).
     $('[data-popup-open]').on('click', function (e) {
         var targeted_popup_class = $(this).attr('data-popup-open');
         $('[data-popup="' + targeted_popup_class + '"]').fadeIn(350);
         e.preventDefault();
     });
+
     //Close
     $('[data-popup-close]').on('click', function (e) {
         var targeted_popup_class = $(this).attr('data-popup-close');
