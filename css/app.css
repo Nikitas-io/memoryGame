@@ -1,3 +1,15 @@
+@media screen and (max-width: 600px) {
+    .card {
+        max-height: 80px;
+        max-width: 80px;
+    }
+    .deck {
+        margin: 50px;
+        max-width:400px;
+        max-height: 400px;
+    }
+}
+
 html {
     box-sizing: border-box;
 }
@@ -22,15 +34,15 @@ body {
     font-family: 'Coda', cursive;
 }
 
-.tip{
+.tip {
     text-align: center;
     margin: 8px;
 }
 
-.playAgain{
+.playAgain {
     margin-top: 1%;
     margin-bottom: 1.5%;
-    background-color:#02ccba;
+    background-color: #02ccba;
     border: none;
     color: white;
     padding: 16px 32px;
@@ -38,20 +50,20 @@ body {
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
-
-    -webkit-transition-duration: 0.4s; /* Safari */
+    -webkit-transition-duration: 0.4s;
+    /* Safari */
     transition-duration: 0.4s;
     cursor: pointer;
-    border-radius:8px;
+    border-radius: 8px;
     margin-right: 1.5%;
 }
 
-.playAgain:hover{
+.playAgain:hover {
     background-color: #06335e;
     color: white;
 }
 
-.btn{
+.btn {
     display: none;
 }
 
@@ -162,6 +174,7 @@ h1 {
 }
 
 /* Match and unmatch inspiration from https://codepen.io/levineuland/pen/AmwCL. */
+
 @keyframes rubberBand {
     from {
         transform: scale3d(1, 1, 1);
@@ -199,6 +212,7 @@ h1 {
 }
 
 /* Modal css */
+
 /* Outer */
 
 .popup {
