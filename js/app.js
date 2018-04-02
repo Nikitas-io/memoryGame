@@ -1,7 +1,6 @@
 let afterReset = false; //Flag used to manage the unmatch class after reseting the game.
-let clickCounter = 0; 
+let clickCounter = 0;
 let moveCounter = 0;
-let mistakeCounter = 0;
 let totalStars = 3; //Start with 3 stars.
 
 /**
@@ -75,9 +74,9 @@ function printScore() {
         $('.stats').append("<br><span class='stars'>☆☆☆</span>");
     }
     //Print time.
-    let seconds=$('#seconds').text();
-    let tens=$('#tens').text();
-    $('.stats').append("<br><br>Your time is "+seconds+"s and "+tens+"ms.");
+    let seconds = $('#seconds').text();
+    let tens = $('#tens').text();
+    $('.stats').append("<br><br>Your time is " + seconds + "s and " + tens + "ms.");
 }
 
 $(function () {
@@ -109,7 +108,6 @@ $(function () {
         $('.moves').empty();
         $('.moves').append(moveCounter);
         //Reset star ratings.
-        mistakeCounter = 0;
         totalStars = 3;
         $('#star1').find('strong').html('★');
         $('#star2').find('strong').html('★');
@@ -137,24 +135,28 @@ $(function () {
      * @description In case the two cards do not match, take the appropriate actions.
      */
     function unmatchCards() {
-        mistakeCounter++; //Counts the wrong moves.
         $(flippedCards.card1element).toggleClass('unmatch');
         $(flippedCards.card2element).toggleClass('unmatch');
-        //Every 5 mistakes, subtract a star.
-        if (mistakeCounter == 5) {
+        //Reset the cards that did not match.
+        setTimeout(resetCards, 500);
+    }
+
+    /**
+     * @description Subtract a star from the rating every 10 moves.
+     */
+    function handleStars() {
+        if (moveCounter == 10) {
             $('#star3').find('strong').html('☆');
             totalStars--;
         }
-        if (mistakeCounter == 10) {
+        if (moveCounter == 20) {
             $('#star2').find('strong').html('☆');
             totalStars--;
         }
-        if (mistakeCounter == 15) {
+        if (moveCounter == 30) {
             $('#star1').find('strong').html('☆');
             totalStars--;
         }
-        //Reset the cards that did not match.
-        setTimeout(resetCards, 500);
     }
 
     /**
@@ -200,7 +202,7 @@ $(function () {
     };
 
     //Checks if game has been completed
-    let matchFlag = false; 
+    let matchFlag = false;
 
     //Timer variables
     var seconds = 00;
@@ -256,6 +258,7 @@ $(function () {
                                 unmatchCards();
                             }
                         }
+                        handleStars();
                     }
                 }
             }
