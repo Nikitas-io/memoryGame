@@ -69,9 +69,6 @@ function printScore() {
     } else if (totalStars == 1) {
         $('.stats').append("<br>You get " + totalStars + " star. You can do better :)");
         $('.stats').append("<br><span class='stars'>★☆☆</span>");
-    } else {
-        $('.stats').append("<br>No stars... Better luck next time.");
-        $('.stats').append("<br><span class='stars'>☆☆☆</span>");
     }
     //Print time.
     let seconds = $('#seconds').text();
@@ -151,10 +148,6 @@ $(function () {
         }
         if (moveCounter == 20) {
             $('#star2').find('strong').html('☆');
-            totalStars--;
-        }
-        if (moveCounter == 30) {
-            $('#star1').find('strong').html('☆');
             totalStars--;
         }
     }
