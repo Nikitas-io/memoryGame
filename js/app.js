@@ -3,6 +3,7 @@ let clickCounter = 0;
 let moveCounter = 0;
 let totalStars = 3; //Start with 3 stars.
 
+
 /**
  * @description Shuffle function from http://stackoverflow.com/a/2450976.
  * @param {*} array The array to be shuffled
@@ -69,9 +70,6 @@ function printScore() {
     } else if (totalStars == 1) {
         $('.stats').append("<br>You get " + totalStars + " star. You can do better :)");
         $('.stats').append("<br><span class='stars'>★☆☆</span>");
-    } else {
-        $('.stats').append("<br>No stars... Better luck next time.");
-        $('.stats').append("<br><span class='stars'>☆☆☆</span>");
     }
     //Print time.
     let seconds = $('#seconds').text();
@@ -153,10 +151,6 @@ $(function () {
             $('#star2').find('strong').html('☆');
             totalStars--;
         }
-        if (moveCounter == 30) {
-            $('#star1').find('strong').html('☆');
-            totalStars--;
-        }
     }
 
     /**
@@ -175,7 +169,6 @@ $(function () {
         }
 
         if (tens > 99) {
-            console.log("seconds");
             seconds++;
             appendSeconds.innerHTML = "0" + seconds;
             tens = 0;
@@ -223,14 +216,12 @@ $(function () {
     //Flip and match cards.
     $('.deck').on('click', 'li', function () {
         let isClosed = $(this).hasClass('close');
-        let isShown = $(this).hasClass('show');
 
         //Start timer.
         clearInterval(Interval);
         Interval = setInterval(startTimer, 10);
 
         if (clickCounter <= 2) { //Make sure user doesn't open third card accidentally.
-            let isMatched = $(this).hasClass('match');
 
             if (isClosed) {
                 clickCounter += 1;
